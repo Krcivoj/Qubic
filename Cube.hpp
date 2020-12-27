@@ -1,4 +1,5 @@
-
+#include <optional>
+#include <vector>
 
 class Cube{
     private:
@@ -7,4 +8,7 @@ class Cube{
         Cube();
 
         void clear();
+        std::optional<int> result();
+        bool play(std::vector<int>);
+        void print();
 };
