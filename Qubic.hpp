@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Cube.hpp"
 #include "Player.hpp"
 
@@ -7,7 +9,7 @@
 class Qubic{
     private:
         Cube mCube;
-        std::vector<Player> players;
+        std::vector<Player> mPlayers;
 
     public:
         Qubic();
