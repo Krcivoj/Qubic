@@ -15,9 +15,24 @@ void Cube::clear() {
                 cube[i][j][k]=' ';    
 }
 
+char Cube::value(int i, int j, int k){
+    return cube[i][j][k];
+}
+
+//vraća 1 ako je X pobjedio, -1 ako je O pobjedio, 0 ako je nerjeseno
+//ako nije nista od navedenog prazan optional
+std::optional<int> Cube::result() {
+    if(winning_line('X')) return 1;
+    if(winning_line('O')) return -1;
+    //promjenio sam samo za jedan nivo
+    if(mNumber>=16) return 0; 
+    return {};
+}
+
 bool Cube::winning_line(char c){
     //najprije po levelima provjerimo dobitke u horizontalnom polozaju =40slučajeva
-    for(int i=0;i<4;i++){
+    //promjenio sam samo za jedan nivo
+    for(int i=0;i<1;i++){
         //provjera po redcima
         for(int j=0;j<4;j++){
             if(cube[i][j][0]==c && cube[i][j][1]==c && cube[i][j][2]==c && cube[i][j][3]==c) return true;
@@ -31,7 +46,7 @@ bool Cube::winning_line(char c){
         if(cube[i][0][3]==c && cube[i][1][2]==c && cube[i][2][1]==c && cube[i][3][0]==c ) return true;
     }
     //za vertikalne netrebam provjeravat horizontalne jer to vec jesmo =24
-    for(int i=0;i<4;i++){
+    /*for(int i=0;i<4;i++){
         //provjera po stupcima
         for(int j=0;j<4;j++){
             if(cube[0][j][i]==c && cube[1][j][i]==c && cube[2][j][i]==c && cube[3][j][i]==c) return true;
@@ -49,27 +64,41 @@ bool Cube::winning_line(char c){
     if(cube[0][0][0]==c && cube[2][2][2]==c && cube[3][3][3]==c && cube[1][1][1]==c ) return true;
     if(cube[0][0][3]==c && cube[1][1][2]==c && cube[2][2][1]==c && cube[3][3][0]==c ) return true;
     if(cube[0][3][3]==c && cube[1][2][2]==c && cube[2][1][1]==c && cube[3][1][1]==c ) return true;
-    if(cube[0][3][0]==c && cube[1][2][1]==c && cube[2][1][2]==c && cube[3][0][3]==c ) return true;
+    if(cube[0][3][0]==c && cube[1][2][1]==c && cube[2][1][2]==c && cube[3][0][3]==c ) return true;*/
     return false;
 }
-//vraća 1 ako je X pobjedio, -1 ako je O pobjedio, 0 ako je nerjeseno
-//ako nije nista od navedenog prazan optional
-std::optional<int> Cube::result() {
-    if(winning_line('X')) return 1;
-    if(winning_line('O')) return -1;
-    if(mNumber>=64) return 0; 
-    return {};
+
+//mozda postoji neki ljepsi nacin
+std::vector<Move> Cube::generate_moves(){
+    std::vector<Move> moves;
+    //promjenio sam samo za jedan nivo
+    for(int i=0;i<1;i++){
+        for(int j=0;j<4;j++){
+            for(int k=0;k<4;k++){
+                if(cube[i][j][k]==' '){
+                    moves.push_back( Move(i,j,k) );
+                }
+            }
+        }
+    }
+    return moves;
 }
 
-char Cube::value(int i, int j, int k){
-    return cube[i][j][k];
+//odigra potez na poziciji move i poveća broj odigranih
+//vraca true ako je move bio valjan
+//mozda promjenit ovu provjeru
+bool Cube::play(Move move,char c) {
+    if(!move.isValid(*this)) return false;
+    cube[move.level()][move.row()][move.column()] = c;
+    mNumber++;
+    return true;
 }
 
 //iscrtava kocku u terminalu
 void Cube::print(){
     //printanje po nivoima
     for(int j=0;j<4;j++){
-        std::cout << "Nivo " << j+1 << ":" << std::endl;
+        std::cout << "Nivo " << j << ":" << std::endl;
         for(int i=0;i<17;i++){
             std::cout << "-";
         }
@@ -86,30 +115,4 @@ void Cube::print(){
         }
         std::cout << std::endl;
     }
-}
-
-//odigra potez na poziciji move i poveća broj odigranih
-//vraca true ako je move bio valjan
-//mozda promjenit ovu provjeru
-bool Cube::play(Move move,char c) {
-    if(!move.isValid(*this)) return false;
-    cube[move.level()][move.row()][move.column()] = c;
-    mNumber++;
-    return true;
-}
-
-//mozda postoji neki ljepsi nacin
-std::vector<Move> Cube::generate_moves(){
-    std::vector<Move> moves;
-    for(int i=0;i<4;i++){
-        for(int j=0;j<4;j++){
-            for(int k=0;k<4;k++){
-                if(cube[i][j][k]==' '){
-                    Move m(i,j,k);
-                    moves.push_back(m);
-                }
-            }
-        }
-    }
-    return moves;
 }

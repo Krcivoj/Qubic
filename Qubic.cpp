@@ -10,13 +10,13 @@ Qubic::Qubic() {
 std::optional<Player> Qubic::play() {
     std::optional<Player> winner;
     std::optional<int> result;
-    int player_on_move=0;
+    int playerOnMove=0;
     result= mCube.result();
     while(!result.has_value()){
         mCube.print();
-        player_on_move%=2;
-        mPlayers[player_on_move].play(mCube);
-        player_on_move++;  
+        playerOnMove%=2;
+        mPlayers[playerOnMove].play(mCube);
+        playerOnMove++;  
         result= mCube.result();    
     }
     if(result.value()==1){

@@ -12,8 +12,10 @@ class Qubic{
         std::vector<Player> mPlayers;
 
     public:
+        //stvara uvijete za početak igre
         Qubic();
 
+        //implementira logiku igre
         std::optional<Player> play();
 
 };

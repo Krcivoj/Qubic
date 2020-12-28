@@ -1,8 +1,10 @@
 #pragma once
+
 #include "Cube.hpp"
 
 #include <vector>
 #include <iostream>
+#include <utility>
 
 class Cube;
 class Move{
@@ -24,9 +26,9 @@ public:
 class Player{
     private:
         char mName;
-        Move minMax(Cube&, char);
+        
+        std::pair<int, Move> minMax(Cube&, std::vector<Move>, char);
     public:
-        Player();
         Player(char);
 
         char id();

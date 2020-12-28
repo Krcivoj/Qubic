@@ -1,4 +1,5 @@
 #include "Qubic.hpp"
+#include "Player.hpp"
 
 #include <iostream>
 #include <optional>
