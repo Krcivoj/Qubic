@@ -22,58 +22,72 @@ char Cube::value(int i, int j, int k){
 //vraća 1 ako je X pobjedio, -1 ako je O pobjedio, 0 ako je nerjeseno
 //ako nije nista od navedenog prazan optional
 std::optional<int> Cube::result() {
-    if(winning_line('X')) return 1;
-    if(winning_line('O')) return -1;
-    if(mNumber>=16) return 0; 
+    char winner=winning_line();
+    if(winner=='X') return 1;
+    if(winner=='O') return -1; 
+    if(mNumber>=32) return 0;
     return {};
 }
 
-bool Cube::winning_line(char c){
+char Cube::winning_line(){
     //najprije po levelima provjerimo dobitke u horizontalnom polozaju =40slučajeva
-    //promjenio sam samo za jedan nivo
-    for(int i=0;i<1;i++){
+    for(int i=0;i<4;i++){
         //provjera po redcima
         for(int j=0;j<4;j++){
-            if(cube[i][j][0]==c && cube[i][j][1]==c && cube[i][j][2]==c && cube[i][j][3]==c) return true;
+            if(cube[i][j][0]!=' ' && cube[i][j][0]==cube[i][j][1] && cube[i][j][1]==cube[i][j][2] && cube[i][j][2]==cube[i][j][3]) return cube[i][j][0];
         }
         //provjera po stupcima
         for(int j=0;j<4;j++){
-            if(cube[i][0][j]==c && cube[i][1][j]==c && cube[i][2][j]==c && cube[i][3][j]==c) return true;
+            if(cube[i][0][j]!=' ' && cube[i][0][j]==cube[i][1][j] && cube[i][1][j]==cube[i][2][j] && cube[i][2][j]==cube[i][3][j]) return cube[i][0][j];
         }
         //provjera dvije dijagonale
-        if(cube[i][0][0]==c && cube[i][1][1]==c && cube[i][2][2]==c && cube[i][3][3]==c ) return true;
-        if(cube[i][0][3]==c && cube[i][1][2]==c && cube[i][2][1]==c && cube[i][3][0]==c ) return true;
+        if(cube[i][0][0]!=' ' && cube[i][0][0]==cube[i][1][1] && cube[i][1][1]==cube[i][2][2] && cube[i][2][2]==cube[i][3][3]) return cube[i][0][0];
+        if(cube[i][0][3]!=' ' && cube[i][0][3]==cube[i][1][2] && cube[i][1][2]==cube[i][2][1] && cube[i][2][1]==cube[i][3][0]) return cube[i][0][3];
     }
-    /*
+    
     //za vertikalne netrebam provjeravat horizontalne jer to vec jesmo =24
     for(int i=0;i<4;i++){
         //provjera po stupcima
         for(int j=0;j<4;j++){
-            if(cube[0][j][i]==c && cube[1][j][i]==c && cube[2][j][i]==c && cube[3][j][i]==c) return true;
+            if(cube[0][j][i]!=' ' && cube[0][j][i]==cube[1][j][i] && cube[1][j][i]==cube[2][j][i] && cube[2][j][i]==cube[3][j][i]) return cube[0][j][i];
         }
         //provjera dvije dijagonale
-        if(cube[0][0][i]==c && cube[1][1][i]==c && cube[2][2][i]==c && cube[3][3][i]==c ) return true;
-        if(cube[0][3][i]==c && cube[1][2][i]==c && cube[2][1][i]==c && cube[3][0][i]==c ) return true;
+        if(cube[0][0][i]!=' ' && cube[0][0][i]==cube[1][1][i] && cube[1][1][i]==cube[2][2][i] && cube[2][2][i]==cube[3][3][i]) return cube[0][0][i];
+        if(cube[0][3][i]!=' ' && cube[0][3][i]==cube[1][2][i] && cube[1][2][i]==cube[2][1][i] && cube[2][1][i]==cube[3][0][i]) return cube[0][3][i];
     }
     //fale mi dijagonale po redcima =8
     for(int i=0;i<4;i++){
-        if(cube[0][i][0]==c && cube[1][i][1]==c && cube[2][i][2]==c && cube[3][i][3]==c ) return true;
-        if(cube[0][i][3]==c && cube[1][i][2]==c && cube[2][i][1]==c && cube[3][i][0]==c ) return true;
+        if(cube[0][i][0]!=' ' && cube[0][i][0]==cube[1][i][1] && cube[1][i][1]==cube[2][i][2] && cube[2][i][2]==cube[3][i][3]) return cube[0][i][0];
+        if(cube[0][i][3]!=' ' && cube[0][i][3]==cube[1][i][2] && cube[1][i][2]==cube[2][i][1] && cube[2][i][1]==cube[3][i][0]) return cube[0][i][3];
     }
     //unutrasnje dijagonale =4
-    if(cube[0][0][0]==c && cube[2][2][2]==c && cube[3][3][3]==c && cube[1][1][1]==c ) return true;
-    if(cube[0][0][3]==c && cube[1][1][2]==c && cube[2][2][1]==c && cube[3][3][0]==c ) return true;
-    if(cube[0][3][3]==c && cube[1][2][2]==c && cube[2][1][1]==c && cube[3][1][1]==c ) return true;
-    if(cube[0][3][0]==c && cube[1][2][1]==c && cube[2][1][2]==c && cube[3][0][3]==c ) return true;
-    */
-    return false;
+    if(cube[0][0][0]!=' ' && cube[0][0][0]==cube[2][2][2] && cube[2][2][2]==cube[3][3][3] && cube[3][3][3]==cube[1][1][1]) return cube[0][0][0];
+    if(cube[0][0][3]!=' ' && cube[0][0][3]==cube[1][1][2] && cube[1][1][2]==cube[2][2][1] && cube[2][2][1]==cube[3][3][0]) return cube[0][0][3];
+    if(cube[0][3][3]!=' ' && cube[0][3][3]==cube[1][2][2] && cube[1][2][2]==cube[2][1][1] && cube[2][1][1]==cube[3][1][1]) return cube[0][3][3];
+    if(cube[0][3][0]!=' ' && cube[0][3][0]==cube[1][2][1] && cube[1][2][1]==cube[2][1][2] && cube[2][1][2]==cube[3][0][3]) return cube[0][3][0];
+    
+    return ' ';
+}
+
+//mozda postoji neki ljepsi nacin
+std::vector<Move> Cube::generate_first_moves(){
+    std::vector<Move> moves;
+    for(int i=0;i<2;i++){
+        for(int j=0;j<2;j++){
+            for(int k=0;k<2;k++){
+                if(cube[i][j][k]==' '){
+                    moves.push_back( Move(i,j,k) );
+                }
+            }
+        }
+    }
+    return moves;
 }
 
 //mozda postoji neki ljepsi nacin
 std::vector<Move> Cube::generate_moves(){
     std::vector<Move> moves;
-    //dodat cu samo za prvi nivo
-    for(int i=0;i<1;i++){
+    for(int i=0;i<2;i++){
         for(int j=0;j<4;j++){
             for(int k=0;k<4;k++){
                 if(cube[i][j][k]==' '){
@@ -106,7 +120,7 @@ void Cube::unPlay(Move move) {
 void Cube::print(){
     //printanje po nivoima
     //promjenila za provjeru
-    for(int j=0;j<1;j++){
+    for(int j=0;j<2;j++){
         std::cout << "Nivo " << j << ":" << std::endl;
         for(int i=0;i<17;i++){
             std::cout << "-";
