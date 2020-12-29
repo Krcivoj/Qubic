@@ -12,6 +12,7 @@ class Cube{
         
     public:
         Cube();
+        int mTimes;
         int mNumber;
         char cube[4][4][4]; //treba vratiti u private ali samo da mi bude lakse provjerit minmax
         void clear();
@@ -20,9 +21,10 @@ class Cube{
         std::optional<int> result();
         //provjerava postoji li cetvorka za pobjedu ako da true, ako ne false
         char winning_line();
-        std::vector<Move> Cube::generate_first_moves();
+        std::vector<Move> generate_first_moves();
+        std::vector<Move> generate_other_moves();
         //ova funkcija generira sve moguće poteze na tabli, sprema ih u vektor 
-        std::vector<Move> generate_moves();
+        void generate_moves(std::vector<Move>&);
         //odigra potez Move sa znakom char
         bool play(Move,char);
         //odigra potez unazad

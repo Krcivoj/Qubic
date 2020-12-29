@@ -47,6 +47,7 @@ std::pair<int, Move> Player::minMax(Cube& cube, std::vector<Move> moves, char id
     // Check if this branch's best move is worse than the best
 	// option of a previously search branch. If it is, skip it
 
+    cube.generate_moves(moves);
     //terminal state  
     value=cube.result();
     if(value.has_value()){
@@ -121,7 +122,8 @@ std::pair<int, Move> Player::minMax(Cube& cube, std::vector<Move> moves, char id
 void Player::play(Cube& cube) {
     Move move;
     
-    std::vector<Move> moves= cube.generate_moves();
+    std::vector<Move> moves;
+    cube.generate_moves(moves);
     //std::cout << moves.size() << std::endl;
     //cube.print();
     int alpha = -1000;
