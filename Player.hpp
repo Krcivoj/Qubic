@@ -27,7 +27,7 @@ class Player{
     private:
         char mName;
         
-        std::pair<int, Move> minMax(Cube&, std::vector<Move>, char);
+        std::pair<int, Move> minMax(Cube&, std::vector<Move>, char, int , int);
     public:
         Player(char);
 

@@ -7,7 +7,7 @@ Cube::Cube() {
     clear();
 }
 
-//kocku pretvara u praznu koku
+//kocku pretvara u praznu kocku
 void Cube::clear() {
     for(int i=0; i<4; i++)
         for(int j=0; j<4; j++)
@@ -24,7 +24,6 @@ char Cube::value(int i, int j, int k){
 std::optional<int> Cube::result() {
     if(winning_line('X')) return 1;
     if(winning_line('O')) return -1;
-    //promjenio sam samo za jedan nivo
     if(mNumber>=16) return 0; 
     return {};
 }
@@ -45,8 +44,9 @@ bool Cube::winning_line(char c){
         if(cube[i][0][0]==c && cube[i][1][1]==c && cube[i][2][2]==c && cube[i][3][3]==c ) return true;
         if(cube[i][0][3]==c && cube[i][1][2]==c && cube[i][2][1]==c && cube[i][3][0]==c ) return true;
     }
+    /*
     //za vertikalne netrebam provjeravat horizontalne jer to vec jesmo =24
-    /*for(int i=0;i<4;i++){
+    for(int i=0;i<4;i++){
         //provjera po stupcima
         for(int j=0;j<4;j++){
             if(cube[0][j][i]==c && cube[1][j][i]==c && cube[2][j][i]==c && cube[3][j][i]==c) return true;
@@ -64,14 +64,15 @@ bool Cube::winning_line(char c){
     if(cube[0][0][0]==c && cube[2][2][2]==c && cube[3][3][3]==c && cube[1][1][1]==c ) return true;
     if(cube[0][0][3]==c && cube[1][1][2]==c && cube[2][2][1]==c && cube[3][3][0]==c ) return true;
     if(cube[0][3][3]==c && cube[1][2][2]==c && cube[2][1][1]==c && cube[3][1][1]==c ) return true;
-    if(cube[0][3][0]==c && cube[1][2][1]==c && cube[2][1][2]==c && cube[3][0][3]==c ) return true;*/
+    if(cube[0][3][0]==c && cube[1][2][1]==c && cube[2][1][2]==c && cube[3][0][3]==c ) return true;
+    */
     return false;
 }
 
 //mozda postoji neki ljepsi nacin
 std::vector<Move> Cube::generate_moves(){
     std::vector<Move> moves;
-    //promjenio sam samo za jedan nivo
+    //dodat cu samo za prvi nivo
     for(int i=0;i<1;i++){
         for(int j=0;j<4;j++){
             for(int k=0;k<4;k++){
@@ -97,7 +98,8 @@ bool Cube::play(Move move,char c) {
 //iscrtava kocku u terminalu
 void Cube::print(){
     //printanje po nivoima
-    for(int j=0;j<4;j++){
+    //promjenila za provjeru
+    for(int j=0;j<1;j++){
         std::cout << "Nivo " << j << ":" << std::endl;
         for(int i=0;i<17;i++){
             std::cout << "-";

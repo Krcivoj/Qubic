@@ -8,11 +8,12 @@
 class Move;
 class Cube{
     private:
-        char cube[4][4][4];  //prvi indeks oznacava nivo, drugi redak i treći stupac
-        int mNumber;
+          //prvi indeks oznacava nivo, drugi redak i treći stupac
+        
     public:
         Cube();
-        
+        int mNumber;
+        char cube[4][4][4]; //treba vratiti u private ali samo da mi bude lakse provjerit minmax
         void clear();
         char value(int i, int j, int k);
         //ako je završno stanje vraća vrijednost inače ništa

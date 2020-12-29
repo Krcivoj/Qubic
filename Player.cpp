@@ -32,8 +32,8 @@ char Player::id(){
     return mName;
 }
 
-//algoritam min max(verzija bez podrezivanja)
-std::pair<int, Move> Player::minMax(Cube& cube, std::vector<Move> moves, char id){
+//algoritam min max(verzija s podrezivanjem - vrlo ugrubo treba provjerit)
+std::pair<int, Move> Player::minMax(Cube& cube, std::vector<Move> moves, char id, int alpha, int beta){
     std::pair<int, Move> result;
     std::optional<int> value;
     //najprije imam minimax funkciju koja mi vraća vrijednost
@@ -43,19 +43,27 @@ std::pair<int, Move> Player::minMax(Cube& cube, std::vector<Move> moves, char id
     //međutim i dalje nezz kako ću znat kasnije di odigrat potez
     //mozda ako dok idem trazit max u svim generiranim potezima uz max vrijednost pamtim i max indeks u potezima tj potez koji zelim odigrat
     //pa ako mjenjam max mjenjam i taj indeks, na krjau znam koji potez u generiranim u vecotru moram odigrat
-    
+    //za aplha beta ideju, iako mi se ovo cini sumljivo, obzirom na int a ne int
+    // Check if this branch's best move is worse than the best
+	// option of a previously search branch. If it is, skip it
+
     //terminal state
+    
     value=cube.result();
     if(value.has_value()){
         result.first=value.value();
         return result;
     }
-
+    
     int n=moves.size();
     Move move;
     std::pair<int, Move> temp;
     Cube tCube;
-
+    //dodano
+    if(n==0 && !value.has_value()) {
+        std::cout << "greska   " <<cube.mNumber <<  "    " << id << std::endl;
+        cube.print();
+    }
     //max
     if(id == 'X'){
         result.first=-2;
@@ -64,10 +72,13 @@ std::pair<int, Move> Player::minMax(Cube& cube, std::vector<Move> moves, char id
             moves.erase(moves.begin());
             tCube= cube;
             if(!tCube.play(move, 'X'))std::cout<<"NE";
-            temp=minMax(tCube, moves, 'O');
+            temp=minMax(tCube, moves, 'O',alpha,beta);
             if(temp.first>result.first){
                 result.first=temp.first;
                 result.second=move;
+                //dodano za alpha beta 
+                alpha = std::max(alpha, result.first);
+				if (beta <= alpha) break; 
             }
             moves.push_back(move);
             //kad naidemo na 1 sigurno necemo naci bolje pa izlazim
@@ -83,10 +94,12 @@ std::pair<int, Move> Player::minMax(Cube& cube, std::vector<Move> moves, char id
             moves.erase(moves.begin());
             tCube= cube;
             if(!tCube.play(move, 'O'))std::cout<<"NE";
-            temp=minMax(tCube, moves, 'X');
+            temp=minMax(tCube, moves, 'X',alpha,beta);
             if(temp.first<result.first){
                 result.first=temp.first;
                 result.second=move;
+                beta = std::min(beta, result.first);
+				if (beta <= alpha) break; 
             }
             moves.push_back(move);
             //kad naidemo na -1 sigurno necemo naci bolje pa izlazim
@@ -98,8 +111,14 @@ std::pair<int, Move> Player::minMax(Cube& cube, std::vector<Move> moves, char id
 
 void Player::play(Cube& cube) {
     Move move;
+    
+    
     std::vector<Move> moves= cube.generate_moves();
-    move = minMax(cube, moves, mName).second;
+    //std::cout << moves.size() << std::endl;
+    //cube.print();
+    int alpha = -1000;
+    int beta = 1000;
+    move = minMax(cube, moves, mName, alpha, beta).second;
     std::cout << "Na redu je igrac: "<< mName <<std::endl;
     std::cout << "Hint: "<< move <<std::endl;
 
