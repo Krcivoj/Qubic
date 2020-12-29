@@ -95,6 +95,13 @@ bool Cube::play(Move move,char c) {
     return true;
 }
 
+void Cube::unPlay(Move move) {
+    if(cube[move.level()][move.row()][move.column()] != ' '){
+        cube[move.level()][move.row()][move.column()] = ' ';
+        mNumber--;
+    }
+}
+
 //iscrtava kocku u terminalu
 void Cube::print(){
     //printanje po nivoima

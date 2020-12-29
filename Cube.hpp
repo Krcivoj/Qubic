@@ -24,6 +24,8 @@ class Cube{
         std::vector<Move> generate_moves();
         //odigra potez Move sa znakom char
         bool play(Move,char);
+        //odigra potez unazad
+        void unPlay(Move);
         //iscrtava kocku u terminalu
         void print();
 };

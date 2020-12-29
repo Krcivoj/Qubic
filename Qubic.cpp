@@ -32,13 +32,14 @@ std::optional<Player> Qubic::play() {
     mCube.cube[0][2][3] = 'O';
     mCube.cube[0][3][3] = 'O';
     */
-    //mCube.mNumber=4;
+    //mCube.mNumber=12;
     //playerOnMove=1;
     
+    mCube.print();
     while(!result.has_value()){
-        mCube.print();
         playerOnMove%=2;
         mPlayers[playerOnMove].play(mCube);
+        mCube.print();
         playerOnMove++;  
         result= mCube.result();    
     }

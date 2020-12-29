@@ -47,8 +47,7 @@ std::pair<int, Move> Player::minMax(Cube& cube, std::vector<Move> moves, char id
     // Check if this branch's best move is worse than the best
 	// option of a previously search branch. If it is, skip it
 
-    //terminal state
-    
+    //terminal state  
     value=cube.result();
     if(value.has_value()){
         result.first=value.value();
@@ -58,21 +57,32 @@ std::pair<int, Move> Player::minMax(Cube& cube, std::vector<Move> moves, char id
     int n=moves.size();
     Move move;
     std::pair<int, Move> temp;
-    Cube tCube;
+
     //dodano
-    if(n==0 && !value.has_value()) {
+    //ovaj dio me muci
+    //on sluzi jer ne vracamo potez nazad u lisu pa se može dogoditi da kocka nije puna
+    //ali nemamo vise poteza
+    //sto onda vratiti?
+    if(n==0){
+        if(id=='x')result.first=0;
+        else result.first=0;
+        return result;
+    }
+    /*if(n==0 && !value.has_value()) {
         std::cout << "greska   " <<cube.mNumber <<  "    " << id << std::endl;
         cube.print();
-    }
+        std::cin.ignore(1);
+    }*/
     //max
     if(id == 'X'){
         result.first=-2;
         for(int i=0; i<n; i++){
             move=moves.front();
             moves.erase(moves.begin());
-            tCube= cube;
-            if(!tCube.play(move, 'X'))std::cout<<"NE";
-            temp=minMax(tCube, moves, 'O',alpha,beta);
+            if(!cube.play(move, 'X')){std::cout<<"NE"<<move; std::cin.ignore(1);}
+            temp=minMax(cube, moves, 'O', alpha, beta);
+            //moves.push_back(move);
+            cube.unPlay(move);
             if(temp.first>result.first){
                 result.first=temp.first;
                 result.second=move;
@@ -80,7 +90,6 @@ std::pair<int, Move> Player::minMax(Cube& cube, std::vector<Move> moves, char id
                 alpha = std::max(alpha, result.first);
 				if (beta <= alpha) break; 
             }
-            moves.push_back(move);
             //kad naidemo na 1 sigurno necemo naci bolje pa izlazim
             if(result.first==1)break;
         }
@@ -92,16 +101,16 @@ std::pair<int, Move> Player::minMax(Cube& cube, std::vector<Move> moves, char id
         for(int i=0; i<n; i++){
             move=moves.front();
             moves.erase(moves.begin());
-            tCube= cube;
-            if(!tCube.play(move, 'O'))std::cout<<"NE";
-            temp=minMax(tCube, moves, 'X',alpha,beta);
+            if(!cube.play(move, 'O')){std::cout<<"NE"<<move; std::cin.ignore(1);}
+            temp=minMax(cube, moves, 'X', alpha, beta);
+            //moves.push_back(move);
+            cube.unPlay(move);
             if(temp.first<result.first){
                 result.first=temp.first;
                 result.second=move;
                 beta = std::min(beta, result.first);
 				if (beta <= alpha) break; 
             }
-            moves.push_back(move);
             //kad naidemo na -1 sigurno necemo naci bolje pa izlazim
             if(result.first==-1)break;
         }
@@ -111,7 +120,6 @@ std::pair<int, Move> Player::minMax(Cube& cube, std::vector<Move> moves, char id
 
 void Player::play(Cube& cube) {
     Move move;
-    
     
     std::vector<Move> moves= cube.generate_moves();
     //std::cout << moves.size() << std::endl;
