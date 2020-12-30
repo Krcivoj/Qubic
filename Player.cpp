@@ -78,7 +78,7 @@ std::pair<int, Move> Player::minMax(Cube& cube, std::vector<Move> moves, char id
     if(id == 'X'){
         result.first=-2;
         for(int i=0; i<n; i++){
-            move=moves.front();
+            move=moves.front(); if(cube.mNumber==0)std::cout<<'.';
             moves.erase(moves.begin());
             if(!cube.play(move, 'X')){std::cout<<"NE"<<move; std::cin.ignore(1);}
             temp=minMax(cube, moves, 'O', alpha, beta);
@@ -122,8 +122,8 @@ std::pair<int, Move> Player::minMax(Cube& cube, std::vector<Move> moves, char id
 void Player::play(Cube& cube) {
     Move move;
     
-    std::vector<Move> moves;
-    cube.generate_moves(moves);
+    std::vector<Move> moves=cube.generate_other_moves();
+    cube.mTimes=cube.mNumber;
     //std::cout << moves.size() << std::endl;
     //cube.print();
     int alpha = -1000;

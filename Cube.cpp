@@ -26,7 +26,7 @@ std::optional<int> Cube::result() {
     char winner=winning_line();
     if(winner=='X') return 1;
     if(winner=='O') return -1; 
-    if(mNumber>=48) return 0;
+    if(mNumber>=32) return 0;
     return {};
 }
 
@@ -73,9 +73,23 @@ char Cube::winning_line(){
 //mozda postoji neki ljepsi nacin
 std::vector<Move> Cube::generate_first_moves(){
     std::vector<Move> moves;
-    for(int i=0;i<2;i++){
+    for(int i=0;i<1;i++){
         for(int j=0;j<2;j++){
             for(int k=0;k<2;k++){
+                if(cube[i][j][k]==' '){
+                    moves.push_back( Move(i,j,k) );
+                }
+            }
+        }
+    }
+    return moves;
+}
+
+std::vector<Move> Cube::generate_second_moves(){
+    std::vector<Move> moves;
+    for(int i=0;i<1;i++){
+        for(int j=0;j<4;j++){
+            for(int k=0;k<4-j;k++){
                 if(cube[i][j][k]==' '){
                     moves.push_back( Move(i,j,k) );
                 }
@@ -88,7 +102,7 @@ std::vector<Move> Cube::generate_first_moves(){
 //mozda postoji neki ljepsi nacin
 std::vector<Move> Cube::generate_other_moves(){
     std::vector<Move> moves;
-    for(int i=0;i<3;i++){
+    for(int i=0;i<2;i++){
         for(int j=0;j<4;j++){
             for(int k=0;k<4;k++){
                 if(cube[i][j][k]==' '){
@@ -101,9 +115,12 @@ std::vector<Move> Cube::generate_other_moves(){
 }
 
 void Cube::generate_moves(std::vector<Move>& moves){
-    if(mTimes==2)return;
-    if(mTimes==1){
+    if(mTimes>=3)return;
+    if(mTimes==2){
         moves=generate_other_moves();
+    }
+    else if(mTimes==1){
+        moves=generate_second_moves();
     }
     else if(mTimes==0){
         moves=generate_first_moves();
@@ -132,7 +149,7 @@ void Cube::unPlay(Move move) {
 void Cube::print(){
     //printanje po nivoima
     //promjenila za provjeru
-    for(int j=0;j<3;j++){
+    for(int j=0;j<2;j++){
         std::cout << "Nivo " << j << ":" << std::endl;
         for(int i=0;i<17;i++){
             std::cout << "-";

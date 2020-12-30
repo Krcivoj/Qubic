@@ -22,6 +22,7 @@ class Cube{
         //provjerava postoji li cetvorka za pobjedu ako da true, ako ne false
         char winning_line();
         std::vector<Move> generate_first_moves();
+        std::vector<Move> generate_second_moves();
         std::vector<Move> generate_other_moves();
         //ova funkcija generira sve moguće poteze na tabli, sprema ih u vektor 
         void generate_moves(std::vector<Move>&);
