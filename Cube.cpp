@@ -24,9 +24,9 @@ char Cube::value(int i, int j, int k){
 //ako nije nista od navedenog prazan optional
 std::optional<int> Cube::result() {
     char winner=winning_line();
-    if(winner=='X') return 1;
-    if(winner=='O') return -1; 
-    if(mNumber>=32) return 0;
+    if(winner=='X') return 2;
+    if(winner=='O') return -2; 
+    if(mNumber>=64) return 0;
     return {};
 }
 
@@ -102,7 +102,7 @@ std::vector<Move> Cube::generate_second_moves(){
 //mozda postoji neki ljepsi nacin
 std::vector<Move> Cube::generate_other_moves(){
     std::vector<Move> moves;
-    for(int i=0;i<2;i++){
+    for(int i=0;i<4;i++){
         for(int j=0;j<4;j++){
             for(int k=0;k<4;k++){
                 if(cube[i][j][k]==' '){
@@ -149,6 +149,7 @@ void Cube::unPlay(Move move) {
 void Cube::print(){
     //printanje po nivoima
     //promjenila za provjeru
+    /*
     for(int j=0;j<2;j++){
         std::cout << "Nivo " << j << ":" << std::endl;
         for(int i=0;i<17;i++){
@@ -167,4 +168,96 @@ void Cube::print(){
         }
         std::cout << std::endl;
     }
+    */
+    int i;
+    //rub prvog levela
+    std::cout << "         ________________"<<std::endl;
+    //prvi redak prvog levela
+    std::cout << "        /";
+    for(i=0;i<4;i++){
+       std::cout << " " <<cube[0][0][i] << " /";
+    }
+    std::cout << "|" << std::endl;
+    //linija 
+    std::cout <<"       /___/___/___/___/ |"<<std::endl;
+    //drugi redak prvog levela
+    std::cout << "      /";
+    for(i=0;i<4;i++){
+       std::cout << " " <<cube[0][1][i] << " /";
+    }
+    std::cout << "  |" << std::endl;
+    //linija
+    std::cout <<"     /___/___/___/___/   |"<<std::endl;
+    //treci redak prvog levela
+    std::cout << "    /";
+    for(i=0;i<4;i++){
+       std::cout << " " <<cube[0][2][i] << " /";
+    }
+    std::cout << "    |" << std::endl;
+    //linija
+    std::cout <<"   /___/___/___/___/     |"<<std::endl;
+    //cetvrti redak prvog levela
+    std::cout << "  /";
+    for(i=0;i<4;i++){
+       std::cout << " " <<cube[0][3][i] << " /";
+    }
+    std::cout << "      |" << std::endl;
+    //linija
+    std::cout <<" /___/___/___/___/       |"<<std::endl;
+
+    //ovaj dio bi trebao bit isti za svaki "blok"
+    for(int j=1;j<3;j++){
+        //razmaknica medu levelima
+        std::cout << "|       |________|_______|"<<std::endl;
+        //prvi redak drugog levela
+        std::cout << "|       /";
+        std::cout << " " << cube[j][0][0] << " / " << cube[j][0][1] <<
+         " /|"<<cube[j][0][2]<<" / "<<cube[j][0][3]<<" /|"<<std::endl;
+        //linija
+        std::cout <<"|      /___/___/_|_/___/ |"<<std::endl;
+        //drugi redak drugog levela
+        std::cout << "|     /";
+        std::cout << " " << cube[j][1][0] << " / " << cube[j][1][1] <<
+         " / "<<cube[j][2][2]<<"|/ "<<cube[j][3][3]<<" /  |"<<std::endl;
+        //linija
+        std::cout <<"|    /___/___/___|___/   |"<<std::endl;
+        //treci redak drugog levela
+        std::cout << "|   /";
+        std::cout << " " << cube[j][2][0] << " / " << cube[j][2][1] <<
+         " / "<<cube[j][2][2]<<" /|"<<cube[j][2][3]<<" /    |"<<std::endl;
+        //linija
+        std::cout <<"|  /___/___/___/_|_/     |"<<std::endl;
+        //cetvrti redak drugog levela
+        std::cout << "| /";
+        std::cout << " " << cube[j][3][0] << " / " << cube[j][3][1] <<
+         " / "<<cube[j][3][2]<<" / "<<cube[j][3][3]<<"|/      |"<<std::endl;
+        //linija
+        std::cout <<"|/___/___/___/___|       |"<<std::endl;
+    }
+    //razmaknica medu levelima
+        std::cout << "|       |________|_______|"<<std::endl;
+        //prvi redak cetvrtog levela
+        std::cout << "|       /";
+        std::cout << " " << cube[3][0][0] << " / " << cube[3][0][1] <<
+         " /|"<<cube[3][0][2]<<" / "<<cube[3][0][3]<<" /"<<std::endl;
+        //linija
+        std::cout <<"|      /___/___/_|_/___/ "<<std::endl;
+        //drugi redak cetvrtog levela
+        std::cout << "|     /";
+        std::cout << " " << cube[3][1][0] << " / " << cube[3][1][1] <<
+         " / "<<cube[3][1][2]<<"|/ "<<cube[3][1][3]<<" /  "<<std::endl;
+        //linija
+        std::cout <<"|    /___/___/___|___/"<<std::endl;
+        //treci redak cetvrtog levela
+        std::cout << "|   /";
+        std::cout << " " << cube[3][2][0] << " / " << cube[3][2][1] <<
+         " / "<<cube[3][2][2]<<" /|"<<cube[3][2][3]<<" /"<<std::endl;
+        //linija
+        std::cout <<"|  /___/___/___/_|_/"<<std::endl;
+        //cetvrti redak cetvrtog levela
+        std::cout << "| /";
+        std::cout << " " << cube[3][3][0] << " / " << cube[3][3][1] <<
+         " / "<<cube[3][3][2]<<" / "<<cube[3][3][3]<<"|/"<<std::endl;
+        //linija
+        std::cout <<"|/___/___/___/___|"<<std::endl;
 }
