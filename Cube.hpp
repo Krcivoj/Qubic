@@ -32,4 +32,5 @@ class Cube{
         void unPlay(Move);
         //iscrtava kocku u terminalu
         void print();
+        int heuristic(char,char);
 };

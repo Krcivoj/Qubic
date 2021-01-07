@@ -44,10 +44,10 @@ std::optional<Player> Qubic::play() {
         playerOnMove++;  
         result= mCube.result();    
     }
-    if(result.value()==2){
+    if(result.value()==500){
         winner=mPlayers[0];
     }
-    else if(result.value()==-2){
+    else if(result.value()==-500){
         winner=mPlayers[1];
     }
     return winner;

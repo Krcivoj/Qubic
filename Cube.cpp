@@ -24,8 +24,8 @@ char Cube::value(int i, int j, int k){
 //ako nije nista od navedenog prazan optional
 std::optional<int> Cube::result() {
     char winner=winning_line();
-    if(winner=='X') return 2;
-    if(winner=='O') return -2; 
+    if(winner=='X') return 500;
+    if(winner=='O') return -500; 
     if(mNumber>=64) return 0;
     return {};
 }
@@ -218,7 +218,7 @@ void Cube::print(){
         //drugi redak drugog levela
         std::cout << "|     /";
         std::cout << " " << cube[j][1][0] << " / " << cube[j][1][1] <<
-         " / "<<cube[j][2][2]<<"|/ "<<cube[j][3][3]<<" /  |"<<std::endl;
+         " / "<<cube[j][1][2]<<"|/ "<<cube[j][1][3]<<" /  |"<<std::endl;
         //linija
         std::cout <<"|    /___/___/___|___/   |"<<std::endl;
         //treci redak drugog levela
@@ -260,4 +260,239 @@ void Cube::print(){
          " / "<<cube[3][3][2]<<" / "<<cube[3][3][3]<<"|/"<<std::endl;
         //linija
         std::cout <<"|/___/___/___/___|"<<std::endl;
+}
+
+int Cube::heuristic(char player, char opponent){
+    //idem po svim winning lines i brojim koliko se znakova ukupno nalazi nasih i protivnikovih
+    int result=0;
+    for(int i=0;i<4;i++){
+        //provjera po redcima
+        for(int j=0;j<4;j++){
+            int broj_pl=0;
+            int broj_op=0;
+            for(int k=0;k<4;k++){
+                if(cube[i][j][k]==player) broj_pl++;
+                if(cube[i][j][k]==opponent) broj_op++;
+            }
+            if(broj_pl>0 && broj_op==0){
+                if(broj_pl==1) result+=2;
+                else if(broj_pl==2) result+=4;
+                else if(broj_pl==3) result+=6;
+            }
+            else if(broj_pl==0 && broj_op>0){
+                if(broj_op==1) result-=1;
+                else if(broj_op==2) result-=3;
+                else if(broj_op==3) result-=5;
+            }
+        }
+        //provjera po stupcima
+        for(int j=0;j<4;j++){
+            int broj_pl=0;
+            int broj_op=0;
+            for(int k=0;k<4;k++){
+                if(cube[i][k][j]==player) broj_pl++;
+                if(cube[i][k][j]==opponent) broj_op++;
+            }
+            if(broj_pl>0 && broj_op==0){
+                if(broj_pl==1) result+=2;
+                else if(broj_pl==2) result+=4;
+                else if(broj_pl==3) result+=6;
+            }
+            else if(broj_pl==0 && broj_op>0){
+                if(broj_op==1) result-=1;
+                else if(broj_op==2) result-=3;
+                else if(broj_op==3) result-=5;
+            }
+        }
+        //provjera dvije dijagonale
+        int broj_pl=0;
+        int broj_op=0;
+        for(int k=0;k<4;k++){
+            if(cube[i][k][k]==player) broj_pl++;
+            if(cube[i][k][k]==opponent) broj_op++;
+        }
+        if(broj_pl>0 && broj_op==0){
+            if(broj_pl==1) result+=2;
+            else if(broj_pl==2) result+=4;
+            else if(broj_pl==3) result+=6;
+        }
+        else if(broj_pl==0 && broj_op>0){
+            if(broj_op==1) result-=1;
+            else if(broj_op==2) result-=3;
+            else if(broj_op==3) result-=5;
+        }
+        broj_pl=0;
+        broj_op=0;
+        for(int k=0;k<4;k++){
+            if(cube[i][k][3-k]==player) broj_pl++;
+            if(cube[i][k][3-k]==opponent) broj_op++;
+        }
+        if(broj_pl>0 && broj_op==0){
+            if(broj_pl==1) result+=2;
+            else if(broj_pl==2) result+=4;
+            else if(broj_pl==3) result+=6;
+        }
+        else if(broj_pl==0 && broj_op>0){
+            if(broj_op==1) result-=1;
+            else if(broj_op==2) result-=3;
+            else if(broj_op==3) result-=5;
+        }
+    }
+    //za vertikalne netrebam provjeravat horizontalne jer to vec jesmo
+    for(int i=0;i<4;i++){
+        //provjera po stupcima
+        for(int j=0;j<4;j++){
+            int broj_pl=0;
+            int broj_op=0;
+            for(int k=0;k<4;k++){
+                if(cube[k][j][i]==player) broj_pl++;
+                if(cube[k][j][i]==opponent) broj_op++;
+            }
+            if(broj_pl>0 && broj_op==0){
+                if(broj_pl==1) result+=2;
+                else if(broj_pl==2) result+=4;
+                else if(broj_pl==3) result+=6;
+            }
+            else if(broj_pl==0 && broj_op>0){
+                if(broj_op==1) result-=1;
+                else if(broj_op==2) result-=3;
+                else if(broj_op==3) result-=5;
+            }
+        }
+        //provjera dvije dijagonale
+        int broj_pl=0;
+        int broj_op=0;
+        for(int k=0;k<4;k++){
+            if(cube[k][k][i]==player) broj_pl++;
+            if(cube[k][k][i]==opponent) broj_op++;
+        }
+        if(broj_pl>0 && broj_op==0){
+            if(broj_pl==1) result+=2;
+            else if(broj_pl==2) result+=4;
+            else if(broj_pl==3) result+=6;
+        }
+        else if(broj_pl==0 && broj_op>0){
+            if(broj_op==1) result-=1;
+            else if(broj_op==2) result-=3;
+            else if(broj_op==3) result-=5;
+        }
+        broj_pl=0;
+        broj_op=0;
+        for(int k=0;k<4;k++){
+            if(cube[k][3-k][i]==player) broj_pl++;
+            if(cube[k][3-k][i]==opponent) broj_op++;
+        }
+        if(broj_pl>0 && broj_op==0){
+            if(broj_pl==1) result+=2;
+            else if(broj_pl==2) result+=4;
+            else if(broj_pl==3) result+=6;
+        }
+        else if(broj_pl==0 && broj_op>0){
+            if(broj_op==1) result-=1;
+            else if(broj_op==2) result-=3;
+            else if(broj_op==3) result-=5;
+        }
+    }
+    //fale mi dijagonale po redcima
+    for(int i=0;i<4;i++){
+        int broj_pl=0;
+        int broj_op=0;
+        for(int k=0;k<4;k++){
+            if(cube[k][i][k]==player) broj_pl++;
+            if(cube[k][i][k]==opponent) broj_op++;
+        }
+        if(broj_pl>0 && broj_op==0){
+            if(broj_pl==1) result+=2;
+            else if(broj_pl==2) result+=4;
+            else if(broj_pl==3) result+=6;
+        }
+        else if(broj_pl==0 && broj_op>0){
+            if(broj_op==1) result-=1;
+            else if(broj_op==2) result-=3;
+            else if(broj_op==3) result-=5;
+        }
+        broj_pl=0;
+        broj_op=0;
+        for(int k=0;k<4;k++){
+            if(cube[k][i][3-k]==player) broj_pl++;
+            if(cube[k][i][3-k]==opponent) broj_op++;
+        }
+        if(broj_pl>0 && broj_op==0){
+            if(broj_pl==1) result+=2;
+            else if(broj_pl==2) result+=4;
+            else if(broj_pl==3) result+=6;
+        }
+        else if(broj_pl==0 && broj_op>0){
+            if(broj_op==1) result-=1;
+            else if(broj_op==2) result-=3;
+            else if(broj_op==3) result-=5;
+        }
+    }
+    //unutrasnje dijagonale
+    int broj_pl=0;
+    int broj_op=0;
+    for(int i=0;i<4;i++){
+        if(cube[i][i][i]==player) broj_pl++;
+        else if(cube[i][i][i]==opponent) broj_op++;
+    }
+    if(broj_pl>0 && broj_op==0){
+            if(broj_pl==1) result+=2;
+            else if(broj_pl==2) result+=4;
+            else if(broj_pl==3) result+=6;
+        }
+        else if(broj_pl==0 && broj_op>0){
+            if(broj_op==1) result-=1;
+            else if(broj_op==2) result-=3;
+            else if(broj_op==3) result-=5;
+        }
+    broj_pl=0;
+    broj_op=0;
+    for(int i=0;i<4;i++){
+        if(cube[i][i][3-i]==player) broj_pl++;
+        else if(cube[i][i][3-i]==opponent) broj_op++;
+    }
+    if(broj_pl>0 && broj_op==0){
+            if(broj_pl==1) result+=2;
+            else if(broj_pl==2) result+=4;
+            else if(broj_pl==3) result+=6;
+        }
+        else if(broj_pl==0 && broj_op>0){
+            if(broj_op==1) result-=1;
+            else if(broj_op==2) result-=3;
+            else if(broj_op==3) result-=5;
+        }
+    broj_pl=0;
+    broj_op=0;
+    for(int i=0;i<4;i++){
+        if(cube[3-i][i][i]==player) broj_pl++;
+        else if(cube[3-i][i][i]==opponent) broj_op++;
+    }
+    if(broj_pl>0 && broj_op==0){
+            if(broj_pl==1) result+=2;
+            else if(broj_pl==2) result+=4;
+            else if(broj_pl==3) result+=6;
+        }
+        else if(broj_pl==0 && broj_op>0){
+            if(broj_op==1) result-=1;
+            else if(broj_op==2) result-=3;
+            else if(broj_op==3) result-=5;
+        }
+    broj_pl=0;
+    broj_op=0;
+    for(int i=0;i<4;i++){
+        if(cube[i][3-i][i]==player) broj_pl++;
+        else if(cube[i][3-i][i]==opponent) broj_op++;
+    }
+    if(broj_pl>0 && broj_op==0){
+            if(broj_pl==1) result+=2;
+            else if(broj_pl==2) result+=4;
+            else if(broj_pl==3) result+=6;
+        }
+        else if(broj_pl==0 && broj_op>0){
+            if(broj_op==1) result-=1;
+            else if(broj_op==2) result-=3;
+            else if(broj_op==3) result-=5;
+        }
+    if(player=='O') return -result;
+    return result;
 }

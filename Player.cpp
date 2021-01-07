@@ -52,16 +52,22 @@ std::pair<int, Move> Player::minMax(Cube& cube, std::vector<Move> moves, char id
 
     //dodano
     if(s<=0){
+        /*
         if(mName=='O')result.first=1;
         else result.first=-1;
         result.second=Move(-1,-1,-1);
         return result;
         return{};
+        */
+        result.second = Move(-1,-1,-1);
+        if(id=='X') result.first = cube.heuristic('X','O');
+        else result.first = cube.heuristic('O','X');
+        return result;
     }
 
     //max
     if(id == 'X'){
-        result.first=-10;
+        result.first=-1000;
         for(int i=0; i<n; i++){
             move=moves.front(); if(cube.mNumber==0)std::cout<<'.';
             moves.erase(moves.begin());
@@ -77,13 +83,13 @@ std::pair<int, Move> Player::minMax(Cube& cube, std::vector<Move> moves, char id
             }
             if (beta <= alpha) break;
             //kad naidemo na 2 sigurno necemo naci bolje pa izlazim
-            if(result.first==2)break;
+            if(result.first==500)break;
         }
     }
 
     //min
     else if(id == 'O'){
-        result.first=10;
+        result.first=1000;
         for(int i=0; i<n; i++){
             move=moves.front();
             moves.erase(moves.begin());
@@ -99,7 +105,7 @@ std::pair<int, Move> Player::minMax(Cube& cube, std::vector<Move> moves, char id
             }
             if (beta <= alpha) break;
             //kad naidemo na -2 sigurno necemo naci bolje pa izlazim
-            if(result.first==-2)break;
+            if(result.first==-500)break;
         }
     }
     return result;
@@ -124,13 +130,13 @@ void Player::play(Cube& cube) {
 
     std::cout << moves.size() << std::endl;
     //cube.print();
-    int alpha = -10;
-    int beta = 10;
+    int alpha = -1000;
+    int beta = 1000;
     int n=7;//moves.size();
     for(int i=1; i<n;i++){
         result = minMax(cube, moves, mName, alpha, beta,i);
         std::cout<<i<<','<<result.first<< std::endl;
-        if(result.first==-2 || result.first==2)break;
+        if(result.first==-500 || result.first==500)break;
     }
 
     std::cout << "Privremeni: "<< result.first<< result.second <<std::endl;
@@ -138,7 +144,7 @@ void Player::play(Cube& cube) {
         for(int i=1; i<n;i++){
             result = minMax(cube, moves, 'X', alpha, beta,i);
             std::cout<<i<<','<<result.first<< std::endl;
-            if(result.first==-2 || result.first==2)break;
+            if(result.first==-500 || result.first==500)break;
         }
     }
 
@@ -146,7 +152,7 @@ void Player::play(Cube& cube) {
         for(int i=1; i<n;i++){
             result = minMax(cube, moves, 'O', alpha, beta,i);
             std::cout<<i<<','<<result.first<< std::endl;
-            if(result.first==-2 || result.first==2)break;
+            if(result.first==-500 || result.first==500)break;
         }
     }
 
