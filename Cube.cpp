@@ -325,26 +325,71 @@ int Cube3::maxDepth() {
 }
 
 void Cube3::print(){
-    //printanje po nivoima
-    //promjenila za provjeru
-    for(int j=0;j<3;j++){
-        std::cout << "Nivo " << j << ":" << std::endl;
-        for(int i=0;i<13;i++){
-            std::cout << "-";
-        }
-        std::cout << std::endl;
-        //printanje po redcima
-        for(int k=0;k<3;k++){
-            //sad printamo redak s vrijednostima
-            std::cout << "| " << cube[j][k][0] << " | " << cube[j][k][1] << " | " << cube[j][k][2]<< " |"<<std::endl;
-            //donja linija
-            for(int i=0;i<13;i++){
-                std::cout << "-";
-            }
-            std::cout << std::endl;
-        }
-        std::cout << std::endl;
+    int i;
+    //rub prvog levela
+    std::cout << "       ____________"<<std::endl;
+    //prvi redak prvog levela
+    std::cout << "      /";
+    for(i=0;i<3;i++){
+       std::cout << " " <<cube[0][0][i] << " /";
     }
+    std::cout << "|" << std::endl;
+    //linija 
+    std::cout <<"     /___/___/___/ |"<<std::endl;
+    //drugi redak prvog levela
+    std::cout << "    /";
+    for(i=0;i<3;i++){
+       std::cout << " " <<cube[0][1][i] << " /";
+    }
+    std::cout << "  |" << std::endl;
+    //linija
+    std::cout <<"   /___/___/___/   |"<<std::endl;
+    //treci redak prvog levela
+    std::cout << "  /";
+    for(i=0;i<3;i++){
+       std::cout << " " <<cube[0][2][i] << " /";
+    }
+    std::cout << "    |" << std::endl;
+    //linija
+    std::cout <<" /___/___/___/     |"<<std::endl;
+
+    //ovaj dio bi trebao bit isti za svaki "blok"
+    for(int j=1;j<2;j++){
+        //razmaknica medu levelima
+        std::cout << "|     |______|_____|"<<std::endl;
+        //prvi redak drugog levela
+        std::cout << "|     /";
+        std::cout << " " << cube[j][0][0] << " / " << cube[j][0][1] << "|/ "<<cube[j][0][2]<<" /"<<"|"<<std::endl;
+        //linija
+        std::cout <<"|    /___/___|___/ |"<<std::endl;
+        //drugi redak drugog levela
+        std::cout << "|   /";
+        std::cout << " " << cube[j][1][0] << " / " << cube[j][1][1] << " /|"<<cube[j][1][2]<<" /"<<"  |"<<std::endl;
+        //linija
+        std::cout <<"|  /___/___/_|_/   |"<<std::endl;
+        //treci redak drugog levela
+        std::cout << "| /";
+        std::cout << " " << cube[j][2][0] << " / " << cube[j][2][1] <<" / "<<cube[j][2][2]<<"|/"<<"    |"<<std::endl;
+        //linija
+        std::cout <<"|/___/___/___|     |"<<std::endl;
+    }
+    //razmaknica medu levelima
+        std::cout << "|     |______|_____|"<<std::endl;
+        //prvi redak cetvrtog levela
+        std::cout << "|     /";
+        std::cout << " " << cube[2][0][0] << " / " << cube[2][0][1] << "|/ "<<cube[2][0][2]<<" /"<<std::endl;
+        //linija
+        std::cout <<"|    /___/___|___/ "<<std::endl;
+        //drugi redak cetvrtog levela
+        std::cout << "|   /";
+        std::cout << " " << cube[2][1][0] << " / " << cube[2][1][1] << " /|"<<cube[2][1][2]<<" / "<<std::endl;
+        //linija
+        std::cout <<"|  /___/___/_|_/"<<std::endl;
+        //treci redak cetvrtog levela
+        std::cout << "| /";
+        std::cout << " " << cube[2][2][0] << " / " << cube[2][2][1] <<" / "<<cube[2][2][2]<<"|/"<<std::endl;
+        //linija
+        std::cout <<"|/___/___/___|"<<std::endl;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////
@@ -458,28 +503,6 @@ void Cube4::unPlay(Move move) {
 
 //iscrtava kocku u terminalu
 void Cube4::print(){
-    //printanje po nivoima
-    //promjenila za provjeru
-    /*
-    for(int j=0;j<2;j++){
-        std::cout << "Nivo " << j << ":" << std::endl;
-        for(int i=0;i<17;i++){
-            std::cout << "-";
-        }
-        std::cout << std::endl;
-        //printanje po redcima
-        for(int k=0;k<4;k++){
-            //sad printamo redak s vrijednostima
-            std::cout << "| " << cube[j][k][0] << " | " << cube[j][k][1] << " | " << cube[j][k][2] << " | "<< cube[j][k][3] << " |"<<std::endl;
-            //donja linija
-            for(int i=0;i<17;i++){
-                std::cout << "-";
-            }
-            std::cout << std::endl;
-        }
-        std::cout << std::endl;
-    }
-    */
     int i;
     //rub prvog levela
     std::cout << "         ________________"<<std::endl;

@@ -43,13 +43,6 @@ std::pair<int, Move> Player::minMax(Cube* cube, std::vector<Move> moves, char id
 
     //dodano
     if(s<=0){
-        /*
-        if(mName=='O')result.first=1;
-        else result.first=-1;
-        result.second=Move(-1,-1,-1);
-        return result;
-        return{};
-        */
         result.second = Move(-1,-1,-1);
         if(id=='X') result.first = cube->heuristic('X','O');
         else result.first = cube->heuristic('O','X');
@@ -151,6 +144,5 @@ void Player::play(Cube* cube) {
     do{
         std::cout << "Odaberite potez:" << std::endl;
         std::cin>>move;
-        //move=result.second;
     }while(!cube->play(move,mName));
 }

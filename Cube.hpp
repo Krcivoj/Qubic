@@ -54,12 +54,13 @@ class Cube3: public Cube{
         bool play(Move,char);
         //odigra potez unazad
         void unPlay(Move);
-        //heuristicka funkcija:
-        //svi slucajevi uz uvijete da je samo jedna vrsta oznaka u lineu
-        //ako player koji je prvi ima 2 u redu +4 boda
-        //ako player koji je prvi ima 1 u redu onda +2 boda
-        //ako  protivnik ima 2 u redu -3 boda
-        //ako protivnik ima 1 u redu -1 boda
+        //heuristicka funkcija: 
+        //prvi char = player, drugi char = opponent
+        //svi slucajevi uz uvijete da je samo jedna vrsta oznaka u lineu:
+        //ako player ima 2 u redu onda +4 boda
+        //ako player ima 1 u redu onda +2 boda
+        //ako opponent ima 2 u redu onda -3 boda
+        //ako opponent ima 1 u redu onda -1 boda
         int heuristic(char,char);
         //vraca optimalnu dubinu minmax
         int maxDepth();
@@ -71,6 +72,7 @@ class Cube4: public Cube{
     private:
         //prvi indeks oznacava nivo, drugi redak i treći stupac
         char cube[4][4][4];
+        //broj odigranih poteza <=> broj znakova igraca na tabli
         int mNumber;
 
         //provjerava postoji li cetvorka za pobjedu ako da true, ako ne false
@@ -92,14 +94,15 @@ class Cube4: public Cube{
         bool play(Move,char);
         //odigra potez unazad
         void unPlay(Move);
-        //heuristicka funkcija:
-        //svi slucajevi uz uvijete da je samo jedna vrsta oznaka u lineu
-        //ako player koji je prvi ima 3 u redu +6 boda
-        //ako player koji je prvi ima 2 u redu +4 boda
-        //ako player koji je prvi ima 1 u redu onda +2 boda
-        //ako  protivnik ima 3 u redu -5 boda
-        //ako  protivnik ima 2 u redu -3 boda
-        //ako protivnik ima 1 u redu -1 boda
+        //heuristicka funkcija: 
+        //prvi char = player, drugi char = opponent
+        //svi slucajevi uz uvijete da je samo jedna vrsta oznaka u lineu:
+        //ako player ima 3 u redu onda +6 boda
+        //ako player ima 2 u redu onda +4 boda
+        //ako player ima 1 u redu onda +2 boda
+        //ako opponent ima 3 u redu onda -5 boda
+        //ako opponent ima 2 u redu onda -3 boda
+        //ako opponent ima 1 u redu onda -1 boda
         int heuristic(char,char);
         //vraca optimalnu dubinu minmax
         int maxDepth();
