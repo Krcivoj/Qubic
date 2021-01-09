@@ -8,12 +8,14 @@
 
 class Qubic{
     private:
-        Cube mCube;
+        Cube* mCube;
         std::vector<Player> mPlayers;
 
     public:
         //stvara uvijete za početak igre
         Qubic();
+        //oslobadanje memorije
+        ~Qubic();
 
         //implementira logiku igre
         std::optional<Player> play();

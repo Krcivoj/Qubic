@@ -5,14 +5,6 @@
 #include <utility>
 #include <optional>
 
-bool Move::isValid(Cube& cube){
-    if(mLevel<0 || mLevel>3) return false;
-    if(mRow<0 || mRow>3) return false;
-    if(mColumn<0 || mColumn>3) return false;
-    if(cube.value(mLevel,mRow,mColumn)!=' ') return false;
-    return true;
-}
-
 std::ostream& operator<<(std::ostream& os, const Move& move){
     os << "Level: " << move.mLevel << ", Row: " << move.mRow << ", Column: " << move.mColumn;
     return os;
@@ -33,13 +25,12 @@ char Player::id(){
 }
 
 //algoritam min max(verzija s podrezivanjem - vrlo ugrubo treba provjerit)
-std::pair<int, Move> Player::minMax(Cube& cube, std::vector<Move> moves, char id, int alpha, int beta, int s){
+std::pair<int, Move> Player::minMax(Cube* cube, std::vector<Move> moves, char id, int alpha, int beta, int s){
     std::pair<int, Move> result;
     std::optional<int> value;
 
-    //cube.generate_moves(moves);
     //terminal state  
-    value=cube.result();
+    value=cube->result();
     if(value.has_value()){
         result.first=value.value();
         result.second=Move(-1,-1,-1);
@@ -60,8 +51,8 @@ std::pair<int, Move> Player::minMax(Cube& cube, std::vector<Move> moves, char id
         return{};
         */
         result.second = Move(-1,-1,-1);
-        if(id=='X') result.first = cube.heuristic('X','O');
-        else result.first = cube.heuristic('O','X');
+        if(id=='X') result.first = cube->heuristic('X','O');
+        else result.first = cube->heuristic('O','X');
         return result;
     }
 
@@ -69,12 +60,12 @@ std::pair<int, Move> Player::minMax(Cube& cube, std::vector<Move> moves, char id
     if(id == 'X'){
         result.first=-1000;
         for(int i=0; i<n; i++){
-            move=moves.front(); if(cube.mNumber==0)std::cout<<'.';
+            move=moves.front();
             moves.erase(moves.begin());
-            if(!cube.play(move, 'X')){std::cout<<"NE"<<move; std::cin.ignore(1);}
+            if(!cube->play(move, 'X')){std::cout<<"NE"<<move; std::cin.ignore(1);}
             temp=minMax(cube, moves, 'O', alpha, beta,s-1);
             moves.push_back(move);
-            cube.unPlay(move);
+            cube->unPlay(move);
             if(temp.first>result.first){
                 result.first=temp.first;
                 result.second=move;
@@ -93,10 +84,10 @@ std::pair<int, Move> Player::minMax(Cube& cube, std::vector<Move> moves, char id
         for(int i=0; i<n; i++){
             move=moves.front();
             moves.erase(moves.begin());
-            if(!cube.play(move, 'O')){std::cout<<"NE"<<move; std::cin.ignore(1);}
+            if(!cube->play(move, 'O')){std::cout<<"NE"<<move; std::cin.ignore(1);}
             temp=minMax(cube, moves, 'X', alpha, beta,s-1);
             moves.push_back(move);
-            cube.unPlay(move);
+            cube->unPlay(move);
             if(temp.first<result.first){
                 result.first=temp.first;
                 result.second=move;
@@ -120,11 +111,10 @@ void shuffle(std::vector<Move>& moves){
     }
 } 
 
-void Player::play(Cube& cube) {
+void Player::play(Cube* cube) {
     std::pair<int, Move> result;
     Move move;
-    
-    std::vector<Move> moves=cube.generate_other_moves();
+    std::vector<Move> moves=cube->generate_moves();
     srand(unsigned(time(NULL)));
     shuffle(moves);
 
@@ -132,8 +122,7 @@ void Player::play(Cube& cube) {
     //cube.print();
     int alpha = -1000;
     int beta = 1000;
-    int n=7;//moves.size();
-    for(int i=1; i<n;i++){
+    for(int i=1; i<=cube->maxDepth();i++){
         result = minMax(cube, moves, mName, alpha, beta,i);
         std::cout<<i<<','<<result.first<< std::endl;
         if(result.first==-500 || result.first==500)break;
@@ -141,7 +130,7 @@ void Player::play(Cube& cube) {
 
     std::cout << "Privremeni: "<< result.first<< result.second <<std::endl;
     if(mName=='O' && result.first>0){
-        for(int i=1; i<n;i++){
+        for(int i=1; i<=cube->maxDepth();i++){
             result = minMax(cube, moves, 'X', alpha, beta,i);
             std::cout<<i<<','<<result.first<< std::endl;
             if(result.first==-500 || result.first==500)break;
@@ -149,7 +138,7 @@ void Player::play(Cube& cube) {
     }
 
     else if(mName=='X' && result.first<0){
-        for(int i=1; i<n;i++){
+        for(int i=1; i<=cube->maxDepth();i++){
             result = minMax(cube, moves, 'O', alpha, beta,i);
             std::cout<<i<<','<<result.first<< std::endl;
             if(result.first==-500 || result.first==500)break;
@@ -163,5 +152,5 @@ void Player::play(Cube& cube) {
         std::cout << "Odaberite potez:" << std::endl;
         std::cin>>move;
         //move=result.second;
-    }while(!cube.play(move,mName));
+    }while(!cube->play(move,mName));
 }

@@ -15,7 +15,6 @@ private:
 public:
     Move():mLevel(0),mRow(0),mColumn(0){}
     Move(int i, int j, int k):mLevel(i),mRow(j),mColumn(k){}
-    bool isValid(Cube&);
     int level(){return mLevel;}
     int row(){return mRow;}
     int column(){return mColumn;}
@@ -27,11 +26,11 @@ class Player{
     private:
         char mName;
         
-        std::pair<int, Move> minMax(Cube&, std::vector<Move>, char, int , int, int);
+        std::pair<int, Move> minMax(Cube*, std::vector<Move>, char, int , int, int);
     public:
         Player(char);
 
         char id();
-        void play(Cube&);
+        void play(Cube*);
 };
 
